@@ -1,0 +1,23 @@
+[DEFAULT]
+ignoreip = 127.0.0.1/8
+bantime  = 600       # waktu ban (detik)
+findtime = 600       # waktu pencarian log (detik)
+maxretry = 5         # maksimal retry sebelum ban
+backend  = auto
+
+[nginx-http-auth]
+enabled  = true
+filter   = nginx-http-auth
+action   = iptables[name=HTTP, port=http, protocol=tcp]
+logpath  = /var/log/nginx/error.log
+maxretry = 3
+
+# Contoh jail untuk mendeteksi 429 Too Many Requests
+[nginx-limit-req]
+enabled  = true
+filter   = nginx-limit-req
+action   = iptables[name=HTTP, port=http, protocol=tcp]
+logpath  = /var/log/nginx/access.log
+findtime = 60
+bantime  = 600
+maxretry = 10

@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  webserver:
+    # Gunakan image resmi OWASP CRS yang sudah terpasang ModSecurity
+    image: owasp/modsecurity-crs:nginx
+    container_name: webserver
+    ports:
+      - "80:80"       # Expose port 80
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d      # Konfigurasi Nginx
+      - ./logs:/var/log/nginx                 # Log Nginx
+    environment:
+      # Pastikan ModSecurity aktif (RuleEngine On)
+      MODSEC_RULE_ENGINE: "On"  
+      MODSEC_WEBSERVER: "nginx"
+    restart: always
+
+  fail2ban:
+    image: crazymax/fail2ban
+    container_name: fail2ban
+    volumes:
+      - ./logs:/var/log/nginx      # Lokasi log Nginx untuk dipantau
+      - ./fail2ban:/data           # Lokasi config fail2ban
+    cap_add:
+      - NET_ADMIN
+    restart: always
