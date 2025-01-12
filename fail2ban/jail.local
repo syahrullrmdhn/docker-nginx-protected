@@ -1,10 +1,11 @@
 [DEFAULT]
 ignoreip = 127.0.0.1/8
-bantime  = 600       # waktu ban (detik)
-findtime = 600       # waktu pencarian log (detik)
-maxretry = 5         # maksimal retry sebelum ban
+bantime  = 600       # Waktu ban dalam detik (10 menit)
+findtime = 600       # Waktu pencarian log dalam detik (10 menit)
+maxretry = 5         # Maksimal percobaan sebelum ban
 backend  = auto
 
+# Jail untuk autentikasi HTTP Nginx (Jika digunakan)
 [nginx-http-auth]
 enabled  = true
 filter   = nginx-http-auth
@@ -12,7 +13,7 @@ action   = iptables[name=HTTP, port=http, protocol=tcp]
 logpath  = /var/log/nginx/error.log
 maxretry = 3
 
-# Contoh jail untuk mendeteksi 429 Too Many Requests
+# Jail untuk Rate Limiting (HTTP 429 Too Many Requests)
 [nginx-limit-req]
 enabled  = true
 filter   = nginx-limit-req
